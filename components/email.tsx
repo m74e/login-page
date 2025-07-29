@@ -17,7 +17,7 @@ const [message, setMessage] = useState('');
     setError(null);
 
     try {
-     const response= await axios.post(`${process.env.NEXT_PUBLIC_API_URL}/Account/forgot-password`, {
+     const response= await axios.post(`https://testrsetpass-production.up.railway.app/api/Account/forgot-password`, {
         email,
       });
       setSubmitted(true);
