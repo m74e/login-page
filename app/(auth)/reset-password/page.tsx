@@ -1,10 +1,10 @@
+import { Suspense } from 'react';
 import PasswordCard from '@/components/card'
-import React from 'react'
 
-const page = () => {
+export default function ResetPasswordPage() {
   return (
-    <><PasswordCard/></>
-  )
+    <Suspense fallback={<div className="text-white p-4">Loading form...</div>}>
+      <PasswordCard />
+    </Suspense>
+  );
 }
-
-export default page

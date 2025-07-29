@@ -20,16 +20,13 @@ const LoginCard = () => {
     setError(null);
 
     try {
-      // Replace with your real login endpoint
       const response = await axios.post(
         `${process.env.NEXT_PUBLIC_API_URL}/Account/login`,
         { email, password }
       );
 
-      // Save token or session here
       console.log(response.data);
 
-      // Redirect or update UI
       router.push("/dashboard"); // Example route
     } catch (err) {
   const error = err as AxiosError<{ message?: string }>;
