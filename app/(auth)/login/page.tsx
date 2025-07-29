@@ -2,8 +2,9 @@
 import React, { useState } from "react";
 import axios from "axios";
 import { Eye, EyeOff, LogIn } from "lucide-react";
-import { useRouter } from "next/navigation"; // or "next/router" if using pages dir
+import { useRouter } from "next/navigation";
 import Link from "next/link";
+import type { AxiosError } from "axios";
 
 const LoginCard = () => {
   const [email, setEmail] = useState("");
@@ -30,9 +31,10 @@ const LoginCard = () => {
 
       // Redirect or update UI
       router.push("/dashboard"); // Example route
-    } catch (err: any) {
-      setError(err.response?.data?.message || "Invalid credentials");
-    } finally {
+    } catch (err) {
+  const error = err as AxiosError<{ message?: string }>;
+  setError(error.response?.data?.message || "Invalid credentials");
+} finally {
       setLoading(false);
     }
   };

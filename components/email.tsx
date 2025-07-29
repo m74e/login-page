@@ -2,6 +2,7 @@
 import React, { useState } from 'react';
 import axios from 'axios';
 import { Mail } from 'lucide-react';
+import type { AxiosError } from "axios";
 
 const EmailCard = () => {
   const [email, setEmail] = useState('');
@@ -21,9 +22,10 @@ const [message, setMessage] = useState('');
       });
       setSubmitted(true);
       setMessage(response?.data?.message);
-    } catch (err: any) {
-      setError(err.response?.data?.message || 'Something went wrong');
-    } finally {
+    } catch (err) {
+  const error = err as AxiosError<{ message?: string }>;
+  setError(error.response?.data?.message || "Something went wrong");
+} finally {
       setLoading(false);
     }
   };
