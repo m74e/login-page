@@ -1,10 +1,10 @@
 "use client";
+
 import React, { useState } from "react";
-import axios from "axios";
 import { Eye, EyeOff, LogIn } from "lucide-react";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
-import type { AxiosError } from "axios";
+import api from "@/lib/axios"; 
 
 const LoginCard = () => {
   const [email, setEmail] = useState("");
@@ -12,6 +12,7 @@ const LoginCard = () => {
   const [showPass, setShowPass] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [loading, setLoading] = useState(false);
+
   const router = useRouter();
 
   const handleLogin = async (e: React.FormEvent) => {
@@ -20,18 +21,18 @@ const LoginCard = () => {
     setError(null);
 
     try {
-      const response = await axios.post(
-        `${process.env.NEXT_PUBLIC_API_URL}/Account/login`,
-        { email, password }
-      );
+      const response = await api.post("/Account/login-otp", {
+        email,
+        password,
+      });
 
-      console.log(response.data);
-
-      router.push("/dashboard"); // Example route
-    } catch (err) {
-  const error = err as AxiosError<{ message?: string }>;
-  setError(error.response?.data?.message || "Invalid credentials");
-} finally {
+      console.log("Login success:", response.data);
+      router.push(`/verify-otp?email=${email}`);
+    } catch (err: any) {
+      const message =
+        err?.response?.data?.message || "Invalid credentials or server error";
+      setError(message);
+    } finally {
       setLoading(false);
     }
   };
@@ -86,12 +87,21 @@ const LoginCard = () => {
         </form>
 
         <p className="mt-4 text-sm text-center text-gray-400">
-          Forgot your password?{" "}
+          Forgot your password
           <Link
             href="/email"
             className="text-indigo-400 hover:underline transition"
           >
             Reset here
+          </Link>
+        </p>
+        <p className="mt-4 text-sm text-center text-gray-400">
+          Don’t have an account?
+          <Link
+            href={`/register`}
+            className="text-indigo-400 hover:underline transition"
+          >
+            Create one
           </Link>
         </p>
       </div>
