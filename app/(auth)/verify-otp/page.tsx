@@ -152,27 +152,23 @@ const VerifyOtpPage: React.FC = () => {
         
         const { data } = response;
         
-        // Validate response structure
         if (!data?.accessToken || !data?.refreshToken) {
           throw new Error("Invalid response: missing tokens");
         }
         
         const { accessToken, refreshToken } = data;
         
-        // Set tokens
         const tokensSet = setTokens(accessToken, refreshToken);
         
         if (!tokensSet) {
           throw new Error("Failed to store authentication tokens");
         }
         
-        // Redirect to dashboard
         router.push("/dashboard");
         
       } catch (err: any) {
         console.error("OTP verification error:", err);
         
-        // Handle different types of errors
         if (err.response?.status === 400) {
           setError("Invalid OTP. Please check and try again.");
         } else if (err.response?.status === 404) {
